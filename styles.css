@@ -306,3 +306,51 @@ a:hover{opacity:.9}
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Améliorations pour l'affichage mobile */
+@media (max-width: 768px) {
+
+  /* 4. Réduire les espacements verticaux */
+  .section, .section-alt {
+    padding: 3rem 0;
+  }
+
+  /* 2. Augmenter la taille des titres */
+  .hero h1 {
+    font-size: clamp(2.2rem, 8vw, 3rem); /* Plus grand sur mobile */
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 6vw, 2.2rem); /* Plus grand sur mobile */
+    margin-bottom: 1.25rem;
+  }
+  
+  /* 3. Empiler les boutons d'action */
+  .cta-row {
+    flex-direction: column; /* Passe les boutons en colonne */
+    gap: .75rem;
+    align-items: center; /* Centre les boutons */
+  }
+
+  .cta-row .btn {
+    width: 100%; /* Les boutons prennent toute la largeur */
+    max-width: 320px; /* Mais pas plus de 320px */
+    text-align: center;
+  }
+  
+  /* 1. Passer la galerie sur une seule colonne */
+  .masonry {
+    grid-template-columns: 1fr; /* Une seule colonne */
+    gap: 1.25rem; /* Un peu plus d'espace entre les photos */
+  }
+
+  /* Ajustement pour les cartes de service */
+  .grid {
+     grid-template-columns: 1fr; /* Une seule colonne aussi pour les services */
+  }
+
+  /* Ajustement pour la grille de contact */
+  .contact-grid {
+    gap: 1.5rem;
+  }
+}
