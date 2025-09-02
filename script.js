@@ -1,116 +1,158 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-// 1. Gestion du menu mobile
-const navToggle = document.getElementById('navToggle');
-const nav = document.getElementById('mobileNav'); // On cible "mobileNav"
-if (navToggle && nav) {
-  // Gère le clic sur l'icône hamburger
-  navToggle.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', isOpen);
-  });
+  // 1. Gestion du menu mobile (AMÉLIORÉE)
+  const navToggle = document.getElementById('navToggle');
+  const navClose = document.getElementById('navClose');
+  const nav = document.getElementById('mobileNav');
 
-  // Fermeture automatique du menu au clic sur un lien
-  const navLinks = nav.querySelectorAll('a');
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (nav.classList.contains('open')) {
-        nav.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
+  if (navToggle && nav && navClose) {
+    const openNav = () => {
+      nav.classList.add('open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden'; // Bloque le scroll du body
+    };
+
+    const closeNav = () => {
+      nav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = 'auto'; // Réactive le scroll
+    };
+
+    // Ouvre le menu
+    navToggle.addEventListener('click', openNav);
+    
+    // Ferme le menu avec le bouton X
+    navClose.addEventListener('click', closeNav);
+
+    // Fermeture auto en cliquant sur un lien
+    const navLinks = nav.querySelectorAll('a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', closeNav);
+    });
+
+    // Fermeture avec la touche "Échap"
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        closeNav();
       }
     });
-  });
-}
 
-  // 2. Gestion du bandeau de cookies
-  if (!document.querySelector('.legal-page')) { // Ne pas afficher sur les pages légales
-    const cookieBanner = document.createElement("div");
-    cookieBanner.id = "cookie-banner";
-    cookieBanner.innerHTML = `
-      <div class="container cookie-container">
-        <p>Nous utilisons des cookies pour améliorer votre expérience. 
-        <a href="politique-cookies.html" style="text-decoration: underline;">En savoir plus</a>.</p>
-        <div>
-          <button id="accept-cookies">Accepter</button>
-          <button id="decline-cookies">Refuser</button>
+    // Fermeture en cliquant en dehors du menu
+    document.addEventListener('click', (e) => {
+      if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== navToggle) {
+        closeNav();
+      }
+    });
+  }
+
+  // 2. Gestion du bandeau de cookies (AMÉLIORÉE)
+  const createCookieBanner = () => {
+    // Si le bandeau existe déjà, on ne fait rien
+    if (document.getElementById("cookie-banner")) return;
+    
+    const banner = document.createElement("div");
+    banner.id = "cookie-banner";
+    banner.style.position = 'fixed';
+    banner.style.bottom = '0';
+    banner.style.left = '0';
+    banner.style.width = '100%';
+    banner.style.backgroundColor = 'var(--blue-dark)';
+    banner.style.color = 'white';
+    banner.style.padding = '1rem';
+    banner.style.zIndex = '2000';
+    banner.style.boxShadow = '0 -5px 15px rgba(0,0,0,0.1)';
+    
+    banner.innerHTML = `
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <p style="margin: 0;">Nous utilisons des cookies pour améliorer votre expérience. 
+        <a href="politique-cookies.html" style="text-decoration: underline; color: white;">En savoir plus</a>.</p>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="accept-cookies" class="btn">Accepter</button>
+          <button id="decline-cookies" class="btn btn-outline">Refuser</button>
         </div>
       </div>`;
-
-    if (localStorage.getItem("cookiesAccepted") === null) {
-      document.body.appendChild(cookieBanner);
-    }
-
+      
+    document.body.appendChild(banner);
+    
     const acceptBtn = document.getElementById("accept-cookies");
     const declineBtn = document.getElementById("decline-cookies");
 
     acceptBtn?.addEventListener("click", () => {
       localStorage.setItem("cookiesAccepted", "true");
-      cookieBanner.style.display = "none";
+      banner.remove();
     });
 
     declineBtn?.addEventListener("click", () => {
       localStorage.setItem("cookiesAccepted", "false");
-      cookieBanner.style.display = "none";
+      banner.remove();
+    });
+  };
+
+  // Afficher le bandeau seulement si aucun choix n'a été fait
+  if (localStorage.getItem("cookiesAccepted") === null) {
+    createCookieBanner();
+  }
+
+  // Gérer le clic sur le lien "Gérer les cookies"
+  const manageCookiesLink = document.getElementById('manageCookies');
+  if(manageCookiesLink) {
+    manageCookiesLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      // On supprime l'ancien choix pour que le bandeau s'affiche à nouveau
+      localStorage.removeItem("cookiesAccepted");
+      createCookieBanner();
     });
   }
 
+  // 3. Logique de la galerie Lightbox (INCHANGÉE)
+  const galleryLinks = document.querySelectorAll('.masonry .tile');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const closeBtn = document.querySelector('.lightbox-close');
+  const prevBtn = document.querySelector('.lightbox-prev');
+  const nextBtn = document.querySelector('.lightbox-next');
 
-  // 3. Logique de la galerie Lightbox (CORRIGÉE)
-const galleryLinks = document.querySelectorAll('.masonry .tile');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const closeBtn = document.querySelector('.lightbox-close');
-const prevBtn = document.querySelector('.lightbox-prev');
-const nextBtn = document.querySelector('.lightbox-next');
+  if (lightbox && galleryLinks.length > 0) {
+    const images = Array.from(galleryLinks).map(link => link.href);
+    let currentIndex = 0;
 
-if (lightbox && galleryLinks.length > 0) {
-  // On récupère les URLs des images en grand format depuis les liens
-  const images = Array.from(galleryLinks).map(link => link.href);
-  let currentIndex = 0;
+    const showImage = (index) => {
+      lightboxImg.src = images[index];
+      currentIndex = index;
+      lightbox.classList.add('open'); 
+      document.body.style.overflow = 'hidden';
+    };
 
-  const showImage = (index) => {
-    // On met à jour la source de l'image dans la lightbox
-    lightboxImg.src = images[index];
-    currentIndex = index;
-    // On affiche la lightbox
-    lightbox.classList.add('open'); 
-    document.body.style.overflow = 'hidden';
-  };
+    const closeLightbox = () => {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = 'auto';
+    };
 
-  const closeLightbox = () => {
-    // On cache la lightbox
-    lightbox.classList.remove('open');
-    document.body.style.overflow = 'auto';
-  };
+    const showNextImage = () => showImage((currentIndex + 1) % images.length);
+    const showPrevImage = () => showImage((currentIndex - 1 + images.length) % images.length);
 
-  const showNextImage = () => showImage((currentIndex + 1) % images.length);
-  const showPrevImage = () => showImage((currentIndex - 1 + images.length) % images.length);
-
-  // On attache l'écouteur d'événement au LIEN (<a>) et non à l'image
-  galleryLinks.forEach((link, index) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault(); // Empêche le navigateur de suivre le lien
-      showImage(index);   // Ouvre la lightbox avec la bonne image
+    galleryLinks.forEach((link, index) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        showImage(index);
+      });
     });
-  });
 
-  // Gestion des boutons et de la fermeture
-  closeBtn.addEventListener('click', closeLightbox);
-  nextBtn.addEventListener('click', showNextImage);
-  prevBtn.addEventListener('click', showPrevImage);
-  lightbox.addEventListener('click', (e) => (e.target === lightbox) && closeLightbox());
+    closeBtn.addEventListener('click', closeLightbox);
+    nextBtn.addEventListener('click', showNextImage);
+    prevBtn.addEventListener('click', showPrevImage);
+    lightbox.addEventListener('click', (e) => (e.target === lightbox) && closeLightbox());
 
-  document.addEventListener('keydown', (e) => {
-    if (lightbox.classList.contains('open')) {
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') showNextImage();
-      if (e.key === 'ArrowLeft') showPrevImage();
-    }
-  });
-}
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('open')) {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') showNextImage();
+        if (e.key === 'ArrowLeft') showPrevImage();
+      }
+    });
+  }
 
-
-  // 4. Animations au défilement (Fade-in)
+  // 4. Animations au défilement (Fade-in) (INCHANGÉE)
   const animatedElements = document.querySelectorAll('.fade-in');
   if (animatedElements.length > 0) {
     const observer = new IntersectionObserver((entries) => {
