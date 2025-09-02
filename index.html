@@ -9,29 +9,39 @@
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="preload" href="styles.css" as="style">
   <link rel="stylesheet" href="styles.css">
+  
   <meta property="og:title" content="Agencement Lennon | Menuiserie à Landivisiau">
   <meta property="og:description" content="Menuiserie intérieure & extérieure – La qualité par passion.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="wood-bg-blue.jpg">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary_large_image">
+  
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Agencement Lennon", "description": "Menuiserie intérieure et extérieure sur mesure.", "slogan": "La qualité par passion", "image": "wood-bg-blue.jpg", "url": "https://example.com", "telephone": "+33767426234", "address": {"@type": "PostalAddress", "streetAddress": "11 rue des Cols-Verts", "addressLocality": "Landivisiau", "postalCode": "29400", "addressCountry": "FR"}, "areaServed": ["Finistère", "Bretagne"], "sameAs": ["https://www.facebook.com/AgencementLennon29"]}
   </script>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
+
   <header class="site-header">
     <div class="container header-wrap">
-      <div class="brand">
+      <a href="index.html" class="brand">
         <img src="logo-lennon.png" alt="Logo Agencement Lennon" class="brand-logo">
         <div class="brand-text">
           <span class="brand-title">Agencement Lennon</span>
           <span class="brand-tagline">La qualité par passion</span>
         </div>
-      </div>
-      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
-      <nav id="nav" class="nav" aria-label="Navigation principale">
+      </a>
+      
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="nav">
+        <span class="visually-hidden">Menu</span>
+        <span class="icon-bar" aria-hidden="true"></span>
+        <span class="icon-bar" aria-hidden="true"></span>
+        <span class="icon-bar" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav" aria-label="Navigation principale de bureau">
         <a href="#services">Services</a>
         <a href="#realisations">Réalisations</a>
         <a href="#apropos">À propos</a>
@@ -40,8 +50,13 @@
     </div>
   </header>
 
+  <nav id="nav" class="nav" aria-label="Navigation principale mobile">
+    <a href="#services">Services</a>
+    <a href="#realisations">Réalisations</a>
+    <a href="#apropos">À propos</a>
+    <a href="#contact">Contact</a>
+  </nav>
   <main id="contenu">
-    <!-- HERO -->
     <section class="hero" role="region" aria-label="Présentation">
       <div class="hero-overlay"></div>
       <div class="container hero-inner">
@@ -54,7 +69,6 @@
       </div>
     </section>
 
-    <!-- SERVICES -->
     <section id="services" class="section section-alt">
       <div class="container">
         <h2 class="section-title fade-in">Nos services</h2>
@@ -75,7 +89,6 @@
       </div>
     </section>
 
-    <!-- RÉALISATIONS -->
     <section id="realisations" class="section">
       <div class="container">
         <h2 class="section-title fade-in">Réalisations</h2>
@@ -90,7 +103,6 @@
       </div>
     </section>
 
-    <!-- À PROPOS -->
     <section id="apropos" class="section section-alt">
       <div class="container narrow">
         <h2 class="section-title fade-in">À propos</h2>
@@ -106,7 +118,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section">
       <div class="container">
         <h2 class="section-title fade-in">Contact</h2>
@@ -135,11 +146,11 @@
         <img src="logo-lennon.png" alt="Logo Agencement Lennon" class="footer-logo">
         <p class="muted small">© 2024 Agencement Lennon — Landivisiau</p>
       </div>
-      <nav class="footer-nav">
-        <a href="index.html#services">Services</a>
-        <a href="index.html#realisations">Réalisations</a>
-        <a href="index.html#apropos">À propos</a>
-        <a href="index.html#contact">Contact</a>
+      <nav class="footer-nav" aria-label="Navigation secondaire">
+        <a href="#services">Services</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#apropos">À propos</a>
+        <a href="#contact">Contact</a>
       </nav>
       <div class="footer-legal small">
         <a href="mentions-legales.html">Mentions légales</a> · <a href="politique-cookies.html">Cookies</a>
@@ -147,12 +158,11 @@
     </div>
   </footer>
 
-  <!-- Lightbox Structure -->
   <div id="lightbox" class="lightbox">
-    <span class="lightbox-close">&times;</span>
+    <span class="lightbox-close">×</span>
     <img class="lightbox-content" id="lightbox-img">
-    <a class="lightbox-prev">&#10094;</a>
-    <a class="lightbox-next">&#10095;</a>
+    <a class="lightbox-prev">❮</a>
+    <a class="lightbox-next">❯</a>
   </div>
 
   <script src="script.js" defer></script>
