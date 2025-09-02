@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+
+# IMPORTANT: Remplacez example.com par votre nom de domaine réel
 Sitemap: https://example.com/sitemap.xml
