@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 3. Logique de la galerie Lightbox (INCHANGÉE)
-  const galleryLinks = document.querySelectorAll('.masonry .tile');
+  const galleryLinks = document.querySelectorAll('.gallery-item');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const closeBtn = document.querySelector('.lightbox-close');
